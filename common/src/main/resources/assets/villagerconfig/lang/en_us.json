@@ -19,6 +19,8 @@
   "config.villagerconfig.maxbreedsperday.tooltip": "How often a villager may breed per day (-1 = vanilla behaviour, which allows 2). The breeding cooldown is shortened to fit the limit into the idle activity.",
   "config.villagerconfig.curetime": "Cure Time",
   "config.villagerconfig.curetime.tooltip": "How long curing a zombie villager takes, in percent of the vanilla duration (100 = vanilla, 50 = twice as fast)",
+  "config.villagerconfig.maxcures": "Max Cures",
+  "config.villagerconfig.maxcures.tooltip": "How many times curing the same villager keeps lowering its prices (-1 = vanilla behaviour, which is 1)",
   "config.villagerconfig.lock": "Lock Profession",
   "config.villagerconfig.lock.tooltip": "Whether or not villagers trades will change, when their workstation is replaced (true = vanilla)",
   "config.villagerconfig.category.old_trades": "Old Trade Mechanics",

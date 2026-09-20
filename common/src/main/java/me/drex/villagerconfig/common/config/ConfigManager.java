@@ -7,7 +7,9 @@ import io.github.fablabsmc.fablabs.api.fiber.v1.serialization.FiberSerialization
 import io.github.fablabsmc.fablabs.api.fiber.v1.serialization.JanksonValueSerializer;
 import io.github.fablabsmc.fablabs.api.fiber.v1.tree.ConfigTree;
 import me.drex.villagerconfig.common.VillagerConfig;
+import me.drex.villagerconfig.common.mixin.GossipTypeAccessor;
 import me.drex.villagerconfig.common.platform.PlatformHooks;
+import net.minecraft.world.entity.ai.gossip.GossipType;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -24,6 +26,7 @@ public class ConfigManager {
             .applyFromPojo(CONFIG, ANNOTATED_SETTINGS)
             .build();
     private static final JanksonValueSerializer serializer = new JanksonValueSerializer(false);
+    private static int vanillaCureGossipMax = -1;
 
     public static void load() {
         if (Files.exists(CONFIG_PATH)) {
@@ -36,6 +39,14 @@ public class ConfigManager {
         } else {
             saveModConfig();
         }
+        applyCureStacking();
+    }
+
+    // curing adds a fixed amount of major positive gossip, so raising its cap is what lets repeated cures stack
+    public static void applyCureStacking() {
+        if (vanillaCureGossipMax < 0) vanillaCureGossipMax = GossipType.MAJOR_POSITIVE.max;
+        int cures = CONFIG.features.maxCures;
+        ((GossipTypeAccessor) (Object) GossipType.MAJOR_POSITIVE).setMax(cures < 0 ? vanillaCureGossipMax : vanillaCureGossipMax * cures);
     }
 
     public static void saveModConfig() {
@@ -46,6 +57,7 @@ public class ConfigManager {
         } catch (IOException | FiberException e) {
             VillagerConfig.LOGGER.error("Failed to save config file!", e);
         }
+        applyCureStacking();
     }
 
 }

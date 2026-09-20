@@ -82,6 +82,13 @@ public class ConfigScreen {
                 .setTooltip(Component.translatable("config.villagerconfig.curetime.tooltip"))
                 .build());
 
+        features.addEntry(entryBuilder.startIntField(Component.translatable("config.villagerconfig.maxcures"), CONFIG.features.maxCures)
+                .setDefaultValue(-1)
+                .setMin(-1)
+                .setSaveConsumer(value -> CONFIG.features.maxCures = value)
+                .setTooltip(Component.translatable("config.villagerconfig.maxcures.tooltip"))
+                .build());
+
         builder.setSavingRunnable(ConfigManager::saveModConfig);
 
         return builder.build();

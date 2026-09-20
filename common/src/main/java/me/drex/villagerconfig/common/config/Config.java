@@ -35,6 +35,9 @@ public class Config {
 
         @Setting(comment = "How long curing a zombie villager takes, in percent of the vanilla duration (100 = vanilla, 50 = twice as fast)")
         public double cureTime = 100;
+
+        @Setting(comment = "How many times curing the same villager keeps lowering its prices (-1 = vanilla behaviour, which is 1)")
+        public int maxCures = -1;
     }
 
 }
