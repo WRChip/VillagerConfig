@@ -26,7 +26,8 @@ public class ConfigManager {
             .applyFromPojo(CONFIG, ANNOTATED_SETTINGS)
             .build();
     private static final JanksonValueSerializer serializer = new JanksonValueSerializer(false);
-    private static int vanillaCureGossipMax = -1;
+    private static int vanillaMajorCureGossip = -1;
+    private static int vanillaMinorCureGossip = -1;
 
     public static void load() {
         if (Files.exists(CONFIG_PATH)) {
@@ -42,11 +43,19 @@ public class ConfigManager {
         applyCureStacking();
     }
 
-    // curing adds a fixed amount of major positive gossip, so raising its cap is what lets repeated cures stack
+    public static int scaleCureGossip(int vanillaAmount) {
+        return Math.max(0, (int) Math.round(vanillaAmount * CONFIG.features.cureMultiplier));
+    }
+
+    // curing adds a fixed amount of gossip, so the caps have to grow with it for repeated or stronger cures to count
     public static void applyCureStacking() {
-        if (vanillaCureGossipMax < 0) vanillaCureGossipMax = GossipType.MAJOR_POSITIVE.max;
-        int cures = CONFIG.features.maxCures;
-        ((GossipTypeAccessor) (Object) GossipType.MAJOR_POSITIVE).setMax(cures < 0 ? vanillaCureGossipMax : vanillaCureGossipMax * cures);
+        if (vanillaMajorCureGossip < 0) {
+            vanillaMajorCureGossip = GossipType.MAJOR_POSITIVE.max;
+            vanillaMinorCureGossip = GossipType.MINOR_POSITIVE.max;
+        }
+        int cures = CONFIG.features.maxCures < 0 ? 1 : CONFIG.features.maxCures;
+        ((GossipTypeAccessor) (Object) GossipType.MAJOR_POSITIVE).setMax(scaleCureGossip(vanillaMajorCureGossip) * cures);
+        ((GossipTypeAccessor) (Object) GossipType.MINOR_POSITIVE).setMax(scaleCureGossip(vanillaMinorCureGossip) * cures);
     }
 
     public static void saveModConfig() {

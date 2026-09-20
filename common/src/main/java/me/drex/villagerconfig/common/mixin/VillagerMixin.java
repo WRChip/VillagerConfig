@@ -1,11 +1,16 @@
 package me.drex.villagerconfig.common.mixin;
 
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
+import me.drex.villagerconfig.common.config.ConfigManager;
 import me.drex.villagerconfig.common.data.TradeTable;
 import me.drex.villagerconfig.common.util.CustomVillagerData;
 import me.drex.villagerconfig.common.util.duck.IVillager;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.entity.AgeableMob;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.ai.gossip.GossipContainer;
+import net.minecraft.world.entity.ai.gossip.GossipType;
 import net.minecraft.world.entity.npc.villager.AbstractVillager;
 import net.minecraft.world.entity.npc.villager.Villager;
 import net.minecraft.world.entity.npc.villager.VillagerData;
@@ -24,6 +29,8 @@ import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.UUID;
 
 import static me.drex.villagerconfig.common.config.ConfigManager.CONFIG;
 
@@ -155,6 +162,21 @@ public abstract class VillagerMixin extends AbstractVillager implements IVillage
     public void loadBreedCount(ValueInput input, CallbackInfo ci) {
         this.villagerConfig$breedsToday = input.getIntOr("VillagerConfigBreedsToday", 0);
         this.villagerConfig$breedDay = input.getLongOr("VillagerConfigBreedDay", 0);
+    }
+
+    // major and minor positive gossip are only ever granted by curing, so the type check keeps this cure-only
+    @WrapOperation(
+        method = "onReputationEventFrom",
+        at = @At(
+            value = "INVOKE",
+            target = "Lnet/minecraft/world/entity/ai/gossip/GossipContainer;add(Ljava/util/UUID;Lnet/minecraft/world/entity/ai/gossip/GossipType;I)V"
+        )
+    )
+    public void scaleCureGossip(GossipContainer container, UUID uuid, GossipType type, int amount, Operation<Void> original) {
+        if (type == GossipType.MAJOR_POSITIVE || type == GossipType.MINOR_POSITIVE) {
+            amount = ConfigManager.scaleCureGossip(amount);
+        }
+        original.call(container, uuid, type, amount);
     }
 
     @Override

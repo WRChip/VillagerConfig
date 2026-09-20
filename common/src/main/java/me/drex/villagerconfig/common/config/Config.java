@@ -38,6 +38,9 @@ public class Config {
 
         @Setting(comment = "How many times curing the same villager keeps lowering its prices (-1 = vanilla behaviour, which is 1)")
         public int maxCures = -1;
+
+        @Setting(comment = "Multiplies the price discount gained from each cure (1 = vanilla)")
+        public double cureMultiplier = 1;
     }
 
 }
