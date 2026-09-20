@@ -30,7 +30,7 @@ public class Config {
         @Setting(comment = "How often a villager may restock their trades per day (-1 = vanilla behaviour, which is 2)")
         public int maxRestocksPerDay = -1;
 
-        @Setting(comment = "How often a villager may breed per day (-1 = vanilla behaviour, which caps breeding by food and a 6000 tick cooldown instead of a daily count)")
+        @Setting(comment = "How often a villager may breed per day (-1 = vanilla behaviour, which allows 2, since breeding only runs during the idle activity)")
         public int maxBreedsPerDay = -1;
 
         @Setting(comment = "How long curing a zombie villager takes, in percent of the vanilla duration (100 = vanilla, 50 = twice as fast)")
