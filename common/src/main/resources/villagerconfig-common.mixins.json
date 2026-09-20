@@ -12,6 +12,7 @@
     "MerchantMixin",
     "VillagerAccessor",
     "VillagerDataAccessor",
+    "VillagerMakeLoveMixin",
     "VillagerMixin",
     "WanderingTraderMixin",
     "ZombieMixin",

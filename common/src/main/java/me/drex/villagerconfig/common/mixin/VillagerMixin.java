@@ -95,6 +95,16 @@ public abstract class VillagerMixin extends AbstractVillager implements IVillage
         return limit < 0 ? vanillaLimit : limit;
     }
 
+    // the work activity only runs from tick 2000 to 9000, so the vanilla 2400 tick gap fits 3 restocks at most
+    @ModifyConstant(
+        method = "allowedToRestock",
+        constant = @Constant(longValue = 2400L)
+    )
+    public long adjustRestockDelay(long vanillaDelay) {
+        int limit = CONFIG.features.maxRestocksPerDay;
+        return limit <= 0 ? vanillaDelay : Math.min(vanillaDelay, 7000L / limit);
+    }
+
     // allowedToRestock always lets the first restock of the day through, so 0 needs its own case
     @Inject(
         method = "allowedToRestock",
