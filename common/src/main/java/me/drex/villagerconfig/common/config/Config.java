@@ -26,6 +26,15 @@ public class Config {
 
         @Setting(comment = "Whether villagers need to restock their trades (false = vanilla)")
         public boolean infiniteTrades = false;
+
+        @Setting(comment = "How often a villager may restock their trades per day (-1 = vanilla behaviour, which is 2)")
+        public int maxRestocksPerDay = -1;
+
+        @Setting(comment = "How often a villager may breed per day (-1 = vanilla behaviour, which caps breeding by food and a 6000 tick cooldown instead of a daily count)")
+        public int maxBreedsPerDay = -1;
+
+        @Setting(comment = "How long curing a zombie villager takes, in percent of the vanilla duration (100 = vanilla, 50 = twice as fast)")
+        public double cureTime = 100;
     }
 
 }

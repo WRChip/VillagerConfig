@@ -15,6 +15,7 @@
     "VillagerMixin",
     "WanderingTraderMixin",
     "ZombieMixin",
+    "ZombieVillagerMixin",
     "loot.LootContextParamSetsAccessor",
     "loot.LootContextParamSetsMixin",
     "loot.LootItemFunctionsMixin",

@@ -61,6 +61,27 @@ public class ConfigScreen {
                 .setTooltip(Component.translatable("config.villagerconfig.infiniteTrades.tooltip"))
                 .build());
 
+        features.addEntry(entryBuilder.startIntField(Component.translatable("config.villagerconfig.maxrestocksperday"), CONFIG.features.maxRestocksPerDay)
+                .setDefaultValue(-1)
+                .setMin(-1)
+                .setSaveConsumer(value -> CONFIG.features.maxRestocksPerDay = value)
+                .setTooltip(Component.translatable("config.villagerconfig.maxrestocksperday.tooltip"))
+                .build());
+
+        features.addEntry(entryBuilder.startIntField(Component.translatable("config.villagerconfig.maxbreedsperday"), CONFIG.features.maxBreedsPerDay)
+                .setDefaultValue(-1)
+                .setMin(-1)
+                .setSaveConsumer(value -> CONFIG.features.maxBreedsPerDay = value)
+                .setTooltip(Component.translatable("config.villagerconfig.maxbreedsperday.tooltip"))
+                .build());
+
+        features.addEntry(entryBuilder.startDoubleField(Component.translatable("config.villagerconfig.curetime"), CONFIG.features.cureTime)
+                .setDefaultValue(100)
+                .setMin(0.0)
+                .setSaveConsumer(value -> CONFIG.features.cureTime = value)
+                .setTooltip(Component.translatable("config.villagerconfig.curetime.tooltip"))
+                .build());
+
         builder.setSavingRunnable(ConfigManager::saveModConfig);
 
         return builder.build();
